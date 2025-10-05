@@ -1,2 +1,2 @@
 # Portal-Hello-Kitty
-Trabalho de Aplicação de Gerenciamento Escolar, utilizando a biblioteca Java Switch.
+Trabalho de Aplicação de Gerenciamento Escolar, utilizando a biblioteca Java Swing.

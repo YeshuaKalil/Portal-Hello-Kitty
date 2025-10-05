@@ -88,7 +88,9 @@ public class Principal {
 		disciplinas = new Disciplina[10];
 		turmas = new Turma[10];
 		
-		frame = new JFrame("Gerenciamento Escolar");
+		frame = new JFrame("Portal Hello Kitty");
+		ImageIcon icon = new ImageIcon(Principal.class.getResource("/icon.png"));
+		frame.setIconImage(icon.getImage());
 		frame.setSize(500, 360);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
