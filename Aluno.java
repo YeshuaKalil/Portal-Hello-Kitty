@@ -1,5 +1,3 @@
-package extra;
-
 public class Aluno extends Pessoa {
     protected String matricula;
     protected double nota1;
