@@ -20,6 +20,7 @@ public class Principal {
 	private static RegAlunoPage regAlunoPag;
 	private static RegDiscPage regDiscPag;
 	private static RegProfPage regProfPag;
+	private static RegTurmaPage regTurmaPag;
 	
 	private static Aluno[] alunos;
 	private static Professor[] professores;
@@ -34,6 +35,11 @@ public class Principal {
 	public static void regProfMenu() {
 		cardLayout.show(cards, "Registrar Professor");
 		regProfPag.setup();
+	}
+	
+	public static void regTurmaMenu() {
+		cardLayout.show(cards, "Registrar Turma");
+		regTurmaPag.setup();
 	}
 	
 	public static void regDiscMenu() {
@@ -89,8 +95,8 @@ public class Principal {
 		turmas = new Turma[10];
 		
 		frame = new JFrame("Portal Hello Kitty");
-		ImageIcon icon = new ImageIcon(Principal.class.getResource("/icon.png"));
-		frame.setIconImage(icon.getImage());
+		//ImageIcon icon = new ImageIcon(Principal.class.getResource("/icon.png"));
+		//frame.setIconImage(icon.getImage());
 		frame.setSize(500, 360);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
@@ -110,6 +116,9 @@ public class Principal {
 		
 		regDiscPag = new RegDiscPage(frame);
 		cards.add(regDiscPag, "Registrar Disciplina");
+		
+		regTurmaPag = new RegTurmaPage(frame);
+		cards.add(regTurmaPag, "Registrar Turma");
 		
 		frame.add(cards);
 		frame.setLocationRelativeTo(null);

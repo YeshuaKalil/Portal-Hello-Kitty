@@ -12,6 +12,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -103,10 +104,47 @@ public class PageSettings {
 		if(checkBox == true) {
 			checkBoxPane.add(checkBoxes);
 		} else {
-			checkBoxPane.add(new JLabel("Nenhuma disciplina disponível."));
+			checkBoxPane.add(new JLabel("Nenhum disponível."));
 		}
 		
 		checkBoxes.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
+		JPanel dataModel = new JPanel();
+		dataModel.setLayout(new BoxLayout(dataModel, BoxLayout.Y_AXIS));
+		dataModel.setBackground(new Color(255, 190, 200));
+		dataModel.add(labelPane);
+		dataModel.add(checkBoxPane);
+		return dataModel;
+	}
+	
+	public static JPanel createDataModel(String labelName, JComboBox listaProfs, boolean comboItem) {
+		JLabel label = new JLabel(labelName);
+		label.setFont(new Font("Arial", Font.BOLD, 12));
+		label.setForeground(new Color(255, 100, 100));
+		label.setMaximumSize(new Dimension(150, 20));
+		JPanel labelPane = new JPanel();
+		labelPane.setLayout(new BoxLayout(labelPane, BoxLayout.X_AXIS));
+		labelPane.setMaximumSize(new Dimension(350, 20));
+		labelPane.setBackground(new Color(255, 190, 200));
+		JPanel emptyPane = new JPanel();
+		emptyPane.setMaximumSize(new Dimension(200, 20));
+		emptyPane.setBackground(new Color(255, 190, 200));
+		labelPane.add(label);
+		labelPane.add(emptyPane);
+		
+		JPanel comboBox = new JPanel();
+		comboBox.setLayout(new BoxLayout(comboBox, BoxLayout.Y_AXIS));
+		comboBox.setBackground(new Color(255, 190, 200));
+				
+		JPanel checkBoxPane = new JPanel();
+		checkBoxPane.setLayout(new BoxLayout(checkBoxPane, BoxLayout.X_AXIS));
+		checkBoxPane.setBackground(new Color(255, 190, 200));
+		if(comboItem == true) {
+			checkBoxPane.add(listaProfs);
+		} else {
+			checkBoxPane.add(new JLabel("Nenhum professor cadastrado."));
+		}
+		
+		comboBox.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
 		JPanel dataModel = new JPanel();
 		dataModel.setLayout(new BoxLayout(dataModel, BoxLayout.Y_AXIS));
 		dataModel.setBackground(new Color(255, 190, 200));

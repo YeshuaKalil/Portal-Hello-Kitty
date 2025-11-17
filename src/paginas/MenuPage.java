@@ -46,6 +46,7 @@ public class MenuPage extends JPanel{
 		regAluno.addActionListener(e -> Principal.regAlunoMenu());
 		regProf.addActionListener(e -> Principal.regProfMenu());
 		regDisc.addActionListener(e -> Principal.regDiscMenu());
+		regTurma.addActionListener(e -> Principal.regTurmaMenu());
 		listTurma.addActionListener(e -> Principal.listTurmaMenu());
 		sair.addActionListener(e -> Principal.sairMenu());
 
