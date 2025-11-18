@@ -21,6 +21,7 @@ public class Principal {
 	private static RegDiscPage regDiscPag;
 	private static RegProfPage regProfPag;
 	private static RegTurmaPage regTurmaPag;
+	private static ListTurmaPage listTurmaPag;
 	
 	private static Aluno[] alunos;
 	private static Professor[] professores;
@@ -44,23 +45,12 @@ public class Principal {
 	
 	public static void regDiscMenu() {
 		cardLayout.show(cards, "Registrar Disciplina");
+		regDiscPag.setup();
 	}
 	
 	public static void listTurmaMenu() {
-		int i = 0;
-		while(i<alunos.length) {
-			if(alunos[i] != null) {
-				alunos[i].exibir();
-			} 
-			i++;
-		}
-		i = 0;
-		while(i<professores.length) {
-			if(professores[i] != null) {
-				professores[i].exibir();
-			} 
-			i++;
-		}
+		cardLayout.show(cards, "Listar Turmas");
+		listTurmaPag.setup();
 	}
 	
 	public static void sairMenu() {
@@ -79,14 +69,14 @@ public class Principal {
 	
 	public static void registrarDisc(RegDiscPage regDiscPag, String nome) {
 		encaixarLista(regDiscPag, disciplinas, nome);
-		cardLayout.show(cards, "Menu");
 	}
 	
 	public static void registrarProf(RegProfPage regProfPag, String nome, String CPF, String telefone, String email, int idade, String regisProf, Disciplina[] disc) {
 		encaixarLista(regProfPag, professores, nome, CPF, telefone, email, idade, regisProf, disc);
 		cardLayout.show(cards, "Menu");
 	}
-	public static void registrarTurma() {
+	public static void registrarTurma(RegTurmaPage regTurmaPag, Aluno[] alu, Professor prof, Disciplina disc) {
+		encaixarLista(regTurmaPag, turmas, alu, prof, disc);
 		cardLayout.show(cards, "Menu");
 	}
 	
@@ -122,6 +112,9 @@ public class Principal {
 		
 		regTurmaPag = new RegTurmaPage(frame);
 		cards.add(regTurmaPag, "Registrar Turma");
+		
+		listTurmaPag = new ListTurmaPage(frame);
+		cards.add(listTurmaPag, "Listar Turmas" );
 		
 		frame.add(cards);
 		frame.setLocationRelativeTo(null);
@@ -221,6 +214,23 @@ public class Principal {
 			} else {
 				if((i+1) == disciplinas.length) {
 					JOptionPane.showMessageDialog(regDiscPag, "Não é possível registrar uma disciplina (lista cheia)");
+					loop = false;
+				}
+			}
+			i++;
+		}
+	}
+	private static void encaixarLista(RegTurmaPage regTurmaPag, Turma[] turmas, Aluno[] alu, Professor prof, Disciplina disc) {
+		boolean loop = true;
+		int i = 0;
+		while(loop) {
+			if(turmas[i] == null) {
+				Turma turma = new Turma(alu, prof, disc);
+				turmas[i] = turma;
+				loop = false;
+			} else {
+				if((i+1) == turmas.length) {
+					JOptionPane.showMessageDialog(regTurmaPag, "Não é possível registrar uma Turma (lista cheia)");
 					loop = false;
 				}
 			}

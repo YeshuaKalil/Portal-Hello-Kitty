@@ -19,7 +19,7 @@ public class RegDiscPage extends JPanel{
 		setup();
 	}
 
-	private void setup() {
+	public void setup() {
 		
 		JPanel header = PageSettings.createHeader("Registrar Disciplina");
 		

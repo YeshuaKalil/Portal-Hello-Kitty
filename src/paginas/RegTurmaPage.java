@@ -20,6 +20,7 @@ public class RegTurmaPage extends JPanel {
     private JFrame frame;
     private JPanel containerDisc; // painel para disciplinas dinâmicas
     private Professor professorSelecionado; // guarda o professor atual
+    private ButtonGroup grupoDisciplinas;   // garante apenas uma disciplina
 
     public RegTurmaPage(JFrame frame) {
         this.frame = frame;
@@ -27,15 +28,14 @@ public class RegTurmaPage extends JPanel {
     }
     
     public void setup() {
-        
         this.removeAll();
-        
+
         JPanel header = PageSettings.createHeader("Registrar Turma");
-        
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(new Color(255, 190, 200));
-        
+
         JButton registrar = PageSettings.createButton("Registrar", 100);
         JButton voltar = PageSettings.createButton("Voltar", 100);
         JPanel opcoesProf = new JPanel();
@@ -45,7 +45,8 @@ public class RegTurmaPage extends JPanel {
         opcoesProf.add(registrar);
         opcoesProf.add(Box.createHorizontalStrut(30));
         opcoesProf.add(voltar);
-        
+
+        // alunos
         JCheckBox checkBoxDisc[] = new JCheckBox[10];
         Aluno alunos[] = Principal.getAlunos();
         for(int i = 0; i < alunos.length; i++) {
@@ -56,8 +57,9 @@ public class RegTurmaPage extends JPanel {
                 checkBoxDisc[i].setFocusPainted(false);
             }
         }
-        
         JPanel checkDisc = PageSettings.createDataModel("Alunos: ", checkBoxDisc);
+
+        // professores
         Professor profs[] = Principal.getProfessores();
         String profNomes[] = new String[10];
         for(int i = 0; i < profs.length; i++) {
@@ -65,65 +67,66 @@ public class RegTurmaPage extends JPanel {
                 profNomes[i] = profs[i].getRegisProf() + ": " + profs[i].getNome();
             }
         }
-        
         boolean comboItem = false;
         for(int i = 0; i < profNomes.length; i++) {
             if(profNomes[i] != null) {
                 comboItem = true;
             }
         }
-
         JComboBox listaProfs = new JComboBox(profNomes);
         JPanel containerComboProfs = PageSettings.createDataModel("Professor: ", listaProfs, comboItem);
 
-     // Painel para disciplinas do professor
-        containerDisc.removeAll();
+        // disciplinas (inicializa vazio)
+        containerDisc = new JPanel();
+        containerDisc.setLayout(new BoxLayout(containerDisc, BoxLayout.Y_AXIS));
+        containerDisc.setBackground(new Color(255, 190, 200));
+        JPanel containerDiscModel = PageSettings.createDataModel("Disciplinas: ", containerDisc);
 
-        String profStr = (String) listaProfs.getSelectedItem();
-        if (profStr != null && !profStr.isEmpty()) {
-            String regisProf = profStr.split(":")[0].trim();
-            professorSelecionado = Principal.buscarProfessorPorRegistro(regisProf);
+        // atualiza disciplinas ao mudar professor
+        listaProfs.addActionListener(e -> {
+            containerDisc.removeAll();
+            grupoDisciplinas = new ButtonGroup(); // novo grupo a cada troca
 
-            if (professorSelecionado != null) {
-                Disciplina[] disciplinas = professorSelecionado.getDisc();
+            String profStr = (String) listaProfs.getSelectedItem();
+            if (profStr != null && !profStr.isEmpty()) {
+                String regisProf = profStr.split(":")[0].trim();
+                professorSelecionado = Principal.buscarProfessorPorRegistro(regisProf);
 
-                // Grupo de botões para garantir seleção única
-                ButtonGroup grupoDisciplinas = new ButtonGroup();
+                if (professorSelecionado != null) {
+                    Disciplina[] disciplinas = professorSelecionado.getDisc();
+                    for (Disciplina d : disciplinas) {
+                        if (d != null) {
+                            JRadioButton rb = new JRadioButton(d.getNome());
+                            rb.setBackground(new Color(255, 190, 200));
+                            rb.setForeground(new Color(255, 100, 100));
+                            rb.setFocusPainted(false);
 
-                for (Disciplina d : disciplinas) {
-                    if (d != null) {
-                        JRadioButton rb = new JRadioButton(d.getNome());
-                        rb.setBackground(new Color(255, 190, 200));
-                        rb.setForeground(new Color(255, 100, 100));
-                        rb.setFocusPainted(false);
-
-                        grupoDisciplinas.add(rb);
-                        containerDisc.add(rb);
+                            grupoDisciplinas.add(rb);
+                            containerDisc.add(rb);
+                        }
                     }
                 }
             }
-        }
+            containerDisc.revalidate();
+            containerDisc.repaint();
+        });
 
-        containerDisc.revalidate();
-        containerDisc.repaint();
-        
         panel.add(Box.createVerticalStrut(10));
         panel.add(checkDisc);
         panel.add(Box.createVerticalStrut(10));
         panel.add(containerComboProfs);
         panel.add(Box.createVerticalStrut(10));
-        panel.add(containerDisc);
+        panel.add(containerDiscModel);
         panel.add(Box.createVerticalStrut(20));
         panel.add(opcoesProf);
         panel.add(Box.createVerticalStrut(20));
         panel.add(Box.createVerticalGlue());
-        
+
         voltar.addActionListener(e -> Principal.voltarMenu());
         registrar.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                Aluno alu[] = new Aluno[10];
+                Aluno[] alu = new Aluno[10];
                 boolean aluSelected = false;
                 String profStr = (String) listaProfs.getSelectedItem();
 
@@ -139,7 +142,6 @@ public class RegTurmaPage extends JPanel {
                 } else if (profStr == null || profStr.isEmpty()) {
                     JOptionPane.showMessageDialog(RegTurmaPage.this, "Preencha o campo 'Professor: '");
                 } else {
-                    // Extrair registro do professor
                     String regisProf = profStr.split(":")[0].trim();
                     Professor professorSelecionado = Principal.buscarProfessorPorRegistro(regisProf);
 
@@ -148,36 +150,35 @@ public class RegTurmaPage extends JPanel {
                         return;
                     }
 
-                    // Coletar disciplinas selecionadas
-                    List<Disciplina> disciplinasSelecionadas = new ArrayList<>();
+                    // disciplina escolhida
+                    Disciplina disciplinaSelecionada = null;
                     for (Component comp : containerDisc.getComponents()) {
-                        if (comp instanceof JCheckBox cb && cb.isSelected()) {
+                        if (comp instanceof JRadioButton rb && rb.isSelected()) {
                             for (Disciplina d : professorSelecionado.getDisc()) {
-                                if (d != null && d.getNome().equals(cb.getText())) {
-                                    disciplinasSelecionadas.add(d);
+                                if (d != null && d.getNome().equals(rb.getText())) {
+                                    disciplinaSelecionada = d;
+                                    break;
                                 }
                             }
                         }
                     }
 
-                    if (disciplinasSelecionadas.isEmpty()) {
-                        JOptionPane.showMessageDialog(RegTurmaPage.this, "Selecione ao menos uma disciplina!");
+                    if (disciplinaSelecionada == null) {
+                        JOptionPane.showMessageDialog(RegTurmaPage.this, "Selecione uma disciplina!");
                         return;
                     }
 
-                    // Aqui você pode criar a turma com alunos, professor e disciplinas
-                    // Turma turma = new Turma(alu, professorSelecionado, disciplinasSelecionadas);
-                    Principal.registrarTurma();
+                    Principal.registrarTurma(RegTurmaPage.this, alu, professorSelecionado, disciplinaSelecionada);
                 }
             }
         });
-        
+
         JScrollPane scrollPane = PageSettings.createScroll(panel);
-        
+
         this.setLayout(new BorderLayout());
         this.add(header, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);
-        
+
         this.revalidate();
         this.repaint();
     }
