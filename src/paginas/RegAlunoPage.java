@@ -1,3 +1,6 @@
+// Gustavo Beirão Vinagre da Nobrega Santos
+// João Vitor Antunes dos Santos
+// Ricardo Yeshua Cavalcante Kalil
 package paginas;
 
 import java.awt.*;

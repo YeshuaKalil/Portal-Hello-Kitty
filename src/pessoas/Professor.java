@@ -34,6 +34,9 @@ public class Professor extends Pessoa{
 		return regisProf;
 	}
 
+	public Disciplina[] getDisc() {
+		return disc;
+	}
 	public void setRegisProf(String regisProf) {
 		this.regisProf = regisProf;
 	}

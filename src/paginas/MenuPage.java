@@ -1,3 +1,6 @@
+// Gustavo Beirão Vinagre da Nobrega Santos
+// João Vitor Antunes dos Santos
+// Ricardo Yeshua Cavalcante Kalil
 package paginas;
 
 import principal.*;
@@ -46,6 +49,7 @@ public class MenuPage extends JPanel{
 		regAluno.addActionListener(e -> Principal.regAlunoMenu());
 		regProf.addActionListener(e -> Principal.regProfMenu());
 		regDisc.addActionListener(e -> Principal.regDiscMenu());
+		regTurma.addActionListener(e -> Principal.regTurmaMenu());
 		listTurma.addActionListener(e -> Principal.listTurmaMenu());
 		sair.addActionListener(e -> Principal.sairMenu());
 
